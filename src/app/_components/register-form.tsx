@@ -1,5 +1,5 @@
 "use client";
-import * as z from "zod";
+import type * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -13,26 +13,11 @@ import {
 } from "./ui/form";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-
-const FormSchema = z
-  .object({
-    username: z.string().min(1, "Nazwa użytkownika jest wymagana").max(30),
-    // TODO: Add validation for @pk.edu.pl email
-    email: z
-      .string()
-      .min(1, "Adres email jest wymagany")
-      .email("Nieprawidłowy adres email"),
-    password: z.string().min(8, "Hasło musi składać się z conajmniej 8 znaków"),
-    confirmPassword: z.string().min(1, "Hasła nie są identyczne"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ["confirmPassword"],
-    message: "Hasła nie są identyczne",
-  });
+import { registerSchema } from "~/common/validation/auth";
 
 export const RegisterForm = () => {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<z.infer<typeof registerSchema>>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       username: "",
       email: "",

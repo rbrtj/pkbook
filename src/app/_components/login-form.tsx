@@ -1,6 +1,6 @@
 'use client';
 import { useForm } from "react-hook-form";
-import * as z from "zod";
+import type * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -12,15 +12,11 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-
-const formSchema = z.object({
-  username: z.string().min(1, "Nazwa użytkownika jest wymagana").max(30),
-  password: z.string().min(8, "Hasło musi mieć co najmniej 8 znaków").max(30),
-});
+import { loginSchema } from "~/common/validation/auth";
 
 export const LoginForm = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       username: "",
       password: "",
